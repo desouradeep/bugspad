@@ -38,10 +38,11 @@
 {%- endmacro %}
 
 {%- macro full_width_field(field) %}
+<div class="row-fluid">
     <div class="control-group {% if field.errors %}error{% endif %}">
       {{field.label(class="control-label", label=field.description)}}
       <div class="controls">
-        {{field(class="span8", **kwargs)|safe}}
+        {{field(class="span12", **kwargs)|safe}}
 
         {%- if field.errors %}
           {%- for error in field.errors %}
@@ -50,6 +51,7 @@
         {%- endif %}
       </div>
     </div>
+</div>
 {%- endmacro %}
 
 {% block container_content %}
