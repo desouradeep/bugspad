@@ -37,8 +37,24 @@
 </div>
 {%- endmacro %}
 
+{%- macro full_width_field(field) %}
+    <div class="control-group {% if field.errors %}error{% endif %}">
+      {{field.label(class="control-label", label=field.description)}}
+      <div class="controls">
+        {{field(class="span8", **kwargs)|safe}}
+
+        {%- if field.errors %}
+          {%- for error in field.errors %}
+            <p class="help-block">{{error}}</p>
+          {%- endfor %}
+        {%- endif %}
+      </div>
+    </div>
+{%- endmacro %}
+
 {% block container_content %}
 <form id="bugform" class="form span8">
     {{ dual_form_row([form.product], [form.reporter]) }}
+    {{ full_width_field(form.component) }}
 </form>
 {% endblock %}
