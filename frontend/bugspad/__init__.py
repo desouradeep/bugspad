@@ -18,7 +18,7 @@ APP = flask.Flask(__name__)
 # set up FAS
 # APP.config.from_object('bugspad.default_config')
 APP.session_interface = RedisSessionInterface()
-
+APP.secret_key = 'A0Zr98j/3yXRT'
 
 FAS = FAS(APP)
 

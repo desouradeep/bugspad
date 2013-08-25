@@ -54,9 +54,20 @@
 </div>
 {%- endmacro %}
 
+
+
+
 {% block container_content %}
 <form id="bugform" class="form span8">
     {{ dual_form_row([form.product], [form.reporter]) }}
     {{ full_width_field(form.component) }}
+    {{ dual_form_row([form.version], [form.severity]) }}
+    {{ dual_form_row([form.hardware], [form.os_choice]) }}
+    {{ full_width_field(form.summary) }}
+    {{ full_width_field(form.description) }}
+    {{ full_width_field(form.attachment) }}
+    <p><b>Add external Bug:</b></p>
+    {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
+    <input type="submit" class="btn btn-primary" value="Submit">
 </form>
 {% endblock %}
