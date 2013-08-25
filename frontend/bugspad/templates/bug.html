@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+
+
+{% block container_content %}
+<form class="span8">
+    {{ form.product.label }} {{ form.product }}
+    {{ form.component.label }} {{ form.component }}
+</form>
+{% endblock %}

@@ -7,7 +7,7 @@ from flask.sessions import SessionInterface, SessionMixin
 
 
 class RedisSession(CallbackDict, SessionMixin):
-
+    secret_key = 'kjsdkjfsdfwerwer'
     def __init__(self, initial=None, sid=None, new=False):
         def on_update(self):
             self.modified = True

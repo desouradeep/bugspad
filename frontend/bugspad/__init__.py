@@ -1,4 +1,4 @@
-
+from __future__ import absolute_import
 import os
 
 import flask
@@ -7,7 +7,8 @@ from flask_fas_openid import FAS
 from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 
-from bsession import RedisSessionInterface
+from .bsession import RedisSessionInterface
+from .forms import BugForm
 
 # import forms as forms
 
@@ -50,3 +51,9 @@ def auth_logout():
     FAS.logout()
     flask.flash('You have been logged out')
     return flask.redirect(flask.url_for('index'))
+
+
+@APP.route('/new/')
+def bug_create():
+    form = BugForm()
+    return flask.render_template('bug.html', form=form)
