@@ -1,10 +1,44 @@
 {% extends "base.html" %}
 
+{%- macro dual_form_row(col_one_fields, col_two_fields) %}
+<div class="row-fluid">
+    <div class="span6">
+        {%- for field in col_one_fields %}
+        <div class="control-group {% if field.errors %}error{% endif %}">
+          {{field.label(class="control-label", label=field.description)}}
+          <div class="controls">
+            {{field(class="span12", **kwargs)|safe}}
 
+            {%- if field.errors %}
+              {%- for error in field.errors %}
+                <p class="help-block">{{error}}</p>
+              {%- endfor %}
+            {%- endif %}
+          </div>
+        </div>
+        {%- endfor %}
+    </div>
+    <div class="span6">
+        {%- for field in col_two_fields %}
+        <div class="control-group {% if field.errors %}error{% endif %}">
+          {{field.label(class="control-label", label=field.description)}}
+          <div class="controls">
+            {{field(class="span12", **kwargs)|safe}}
+
+            {%- if field.errors %}
+              {%- for error in field.errors %}
+                <p class="help-block">{{error}}</p>
+              {%- endfor %}
+            {%- endif %}
+          </div>
+        </div>
+        {%- endfor %}
+    </div>
+</div>
+{%- endmacro %}
 
 {% block container_content %}
-<form class="span8">
-    {{ form.product.label }} {{ form.product }}
-    {{ form.component.label }} {{ form.component }}
+<form id="bugform" class="form span8">
+    {{ dual_form_row([form.product], [form.reporter]) }}
 </form>
 {% endblock %}

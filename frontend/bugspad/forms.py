@@ -43,9 +43,11 @@ class BugForm(wtf.Form):
     """For to create/edit a bug."""
     # Basic fields
     product = wtf.TextField(
-        'Product', [wtf.validators.Required()], description=(
+        'Product', [wtf.validators.Required()],
+        default='Fedora', description=(
             "Bugs are categorised into Products and Components. Select a "
             "Classification to narrow down this list."))
+    reporter = wtf.TextField('Reporter', default='rtnpro@gmail.com')
     component = wtf.SelectField(
             'Component', [wtf.validators.Required()],
             choices=get_component_choices(), description=(
