@@ -68,6 +68,29 @@
     {{ full_width_field(form.attachment) }}
     <p><b>Add external Bug:</b></p>
     {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
+
+    <button id='advanced-button' class='btn btn-info' type='button'>Show Advanced Fields</button>
+    <div id="advanced">
+      <br>
+      {{ dual_form_row([form.target_release]) }}
+      {{ dual_form_row([form.status]) }}
+      {{ dual_form_row([form.assignee], [form.fedora_review]) }}
+      {{ dual_form_row([form.qa_contact], [form.release_note]) }}
+      {{ dual_form_row([form.docs_contact], [form.need_info]) }}
+      {{ dual_form_row([form.cc])}}
+      {{ full_width_field(form.alias) }}
+      {{ full_width_field(form.url) }}
+      {{ full_width_field(form.whiteboard) }}
+      {{ full_width_field(form.clone_of) }}
+      {{ full_width_field(form.environment) }}
     <input type="submit" class="btn btn-primary" value="Submit">
 </form>
 {% endblock %}
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#advanced-button').click(function(){
+      $('#advanced').toggle();
+    }
+  }
+</script>

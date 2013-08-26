@@ -38,9 +38,16 @@ def get_os_choices():
 def get_external_bug_location_choices():
     return []
 
+def get_target_release():
+    return [
+        ('18', '18'),
+        ('19', '19'),
+        ('20', '20'),
+        ('rawhide', 'Rawhide')
+    ]
 
 class BugForm(wtf.Form):
-    """For to create/edit a bug."""
+    """Form to create/edit a bug."""
     # Basic fields
     product = wtf.TextField(
         'Product', [wtf.validators.Required()],
@@ -83,5 +90,28 @@ class BugForm(wtf.Form):
         'Location', choices=get_external_bug_location_choices())
     external_bug_bugid = wtf.TextField('Bug ID')
 
-
     # Advanced fields
+    target_release = wtf.SelectField('Target Release', 
+                                     choices=get_target_release())
+    status = wtf.StringField('Status')
+    assignee = wtf.TextField('Assignee')
+    fedora_review = wtf.SelectField('Fedora-Review', choices=[('?','?')])
+    release_note = wtf.SelectField('Fedora requires release note', choices=[
+                ('?','?'),
+                ('+','+'),
+                ('-','-')
+        ])
+    need_info = wtf.SelectField('Need Info', choices=[
+              ('?','?'),
+              ('+','+'),
+              ('-','-')
+        ])
+    qa_contact = wtf.TextField('QA Contact')
+    docs_contact = wtf.TextField('Docs Contact')
+    cc = wtf.TextField('CC')
+    alias = wtf.TextField('Alias')
+    url = wtf.TextField('URL')
+    whiteboard = wtf.TextField('Whiteboard')
+    clone_of = wtf.TextField('Clone Of')
+    environment = wtf.TextAreaField('Environment')
+
