@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 
+{% block js %}
+{{ super() }}
+<script>
+$(function () {
+    function toggleAdvancedFieldsHandler (e) {
+        e.preventDefault();
+        var $fieldset = $('fieldset#advanced');
+        if ($fieldset.css('display') == 'none') {
+            $fieldset.slideDown();
+            $('#toggle-advanced-fields-button').html('Hide advanced fields <i class="icon-chevron-down"></i>');
+        } else {
+            $fieldset.slideUp(function () {
+                $('#toggle-advanced-fields-button').html(
+                    'Show advanced fields <i class="icon-chevron-right"></i>');
+            });
+        }
+    }
+    $('#toggle-advanced-fields-button').bind('click', toggleAdvancedFieldsHandler);
+});
+</script>
+{% endblock %}
+
 {%- macro dual_form_row(col_one_fields, col_two_fields) %}
 <div class="row-fluid">
     <div class="span6">
@@ -59,19 +81,20 @@
 
 {% block container_content %}
 <form id="bugform" class="form span8">
-    {{ dual_form_row([form.product], [form.reporter]) }}
-    {{ full_width_field(form.component) }}
-    {{ dual_form_row([form.version], [form.severity]) }}
-    {{ dual_form_row([form.hardware], [form.os_choice]) }}
-    {{ full_width_field(form.summary) }}
-    {{ full_width_field(form.description) }}
-    {{ full_width_field(form.attachment) }}
-    <p><b>Add external Bug:</b></p>
-    {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
+    <fieldset id="basic">
+        {{ dual_form_row([form.product], [form.reporter]) }}
+        {{ full_width_field(form.component) }}
+        {{ dual_form_row([form.version], [form.severity]) }}
+        {{ dual_form_row([form.hardware], [form.os_choice]) }}
+        {{ full_width_field(form.summary) }}
+        {{ full_width_field(form.description) }}
+        {{ full_width_field(form.attachment) }}
+        <p><b>Add external Bug:</b></p>
+        {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
+    </fieldset>
 
-    <button id='advanced-button' class='btn btn-info' type='button'>Show Advanced Fields</button>
-    <div id="advanced">
-      <br>
+    <a href="#" id='toggle-advanced-fields-button'>Show advanced fields <i class="icon-chevron-right"></i></a>
+    <fieldset id="advanced" style="display: none;">
       {{ dual_form_row([form.target_release]) }}
       {{ dual_form_row([form.status]) }}
       {{ dual_form_row([form.assignee], [form.fedora_review]) }}
@@ -83,7 +106,10 @@
       {{ full_width_field(form.whiteboard) }}
       {{ full_width_field(form.clone_of) }}
       {{ full_width_field(form.environment) }}
-    <input type="submit" class="btn btn-primary" value="Submit">
+    </fieldset>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
 </form>
 {% endblock %}
 
