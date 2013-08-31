@@ -81,16 +81,11 @@ $(function () {
 
 {% block container_content %}
 <form id="bugform" class="form span8">
-    <fieldset id="basic">
+    <fieldset id="basic_one">
         {{ dual_form_row([form.product], [form.reporter]) }}
         {{ full_width_field(form.component) }}
         {{ dual_form_row([form.version], [form.severity]) }}
         {{ dual_form_row([form.hardware], [form.os_choice]) }}
-        {{ full_width_field(form.summary) }}
-        {{ full_width_field(form.description) }}
-        {{ full_width_field(form.attachment) }}
-        <p><b>Add external Bug:</b></p>
-        {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
     </fieldset>
 
     <a href="#" id='toggle-advanced-fields-button'>Show advanced fields <i class="icon-chevron-right"></i></a>
@@ -106,6 +101,13 @@ $(function () {
       {{ full_width_field(form.whiteboard) }}
       {{ full_width_field(form.clone_of) }}
       {{ full_width_field(form.environment) }}
+    </fieldset>
+    <fieldset id="basic_two">
+        {{ full_width_field(form.summary) }}
+        {{ full_width_field(form.description) }}
+        {{ full_width_field(form.attachment) }}
+        <p><b>Add external Bug:</b></p>
+        {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
     </fieldset>
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Submit</button>
