@@ -22,9 +22,22 @@ $(function () {
 </script>
 {% endblock %}
 
+{% block extracss %}
+<style>
+    .required {
+        float: left;
+        padding-left: 3px;
+    }
+    .control-label {
+        float: left;
+    }
+</style>
+{% endblock %}
+
 {%- macro render_field(field) %}
 <div class="control-group {% if field.errors %}error{% endif %}">
-  {{field.label(class="control-label", label=field.description)}}
+    {{field.label(class="control-label", label=field.description)}}
+    {% if field.flags.required %}<span class="required">*</span>{% endif %}
   <div class="controls">
     {{field(**kwargs)|safe}}
 
@@ -59,7 +72,8 @@ $(function () {
 {%- endmacro %}
 
 {% block container_content %}
-<form id="bugform" class="form span8">
+<form id="bugform" class="form span8" method="POST">
+    {{ form.csrf_token }}
     <fieldset id="basic_one">
         {{ dual_form_row([form.product], [form.reporter]) }}
         {{ full_width_field(form.component) }}

@@ -11,6 +11,8 @@
     }
   </style>
   <link href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap-responsive.css')}}" rel="stylesheet" />
+  {% block extracss %}
+  {% endblock %}
 </head>
 <body>
   {% block content %}

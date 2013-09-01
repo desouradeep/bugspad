@@ -1,14 +1,16 @@
 import flask
-# from flask.ext import wtf
-import wtforms as wtf
+from flask.ext import wtf
+from wtforms import (
+        TextField, SelectField, validators, PasswordField,
+        TextAreaField, FileField, StringField)
 from datetime import time
 from datetime import datetime
 
 
 class LoginForm(wtf.Form):
     """ Form to log in the application. """
-    username = wtf.TextField('Username', [wtf.validators.Required()])
-    password = wtf.PasswordField('Password', [wtf.validators.Required()])
+    username = TextField('Username', [validators.Required()])
+    password = PasswordField('Password', [validators.Required()])
 
 
 def get_component_choices():
@@ -36,7 +38,9 @@ def get_os_choices():
 
 
 def get_external_bug_location_choices():
-    return []
+    return [
+        ('foo', 'Foo')
+    ]
 
 def get_target_release():
     return [
@@ -49,21 +53,21 @@ def get_target_release():
 class BugForm(wtf.Form):
     """Form to create/edit a bug."""
     # Basic fields
-    product = wtf.TextField(
-        'Product', [wtf.validators.Required()],
+    product = TextField(
+        'Product', [validators.Required()],
         default='Fedora', description=(
             "Bugs are categorised into Products and Components. Select a "
             "Classification to narrow down this list."))
-    reporter = wtf.TextField('Reporter', default='rtnpro@gmail.com')
-    component = wtf.SelectField(
-            'Component', [wtf.validators.Required()],
+    reporter = TextField('Reporter', default='rtnpro@gmail.com')
+    component = SelectField(
+            'Component', [validators.Required()],
             choices=get_component_choices(), description=(
                 "Components are second-level categories; each belongs to a "
                 "particular Product. Select a Product to narrow down "
                 "this list."))
-    version = wtf.SelectField(
-        'Version', [wtf.validators.Required()], choices=get_fedora_versions())
-    severity = wtf.SelectField('Severity', choices=[
+    version = SelectField(
+        'Version', [validators.Required()], choices=get_fedora_versions())
+    severity = SelectField('Severity', choices=[
             ('unspecified', 'Unspecified'),
             ('urgent', 'Urgent'),
             ('high', 'High'),
@@ -71,9 +75,9 @@ class BugForm(wtf.Form):
             ('low', 'Low')
         ]
     )
-    hardware = wtf.SelectField('Hardware', choices=get_hardware_choices())
-    os_choice = wtf.SelectField('Os', choices=get_os_choices())
-    summary = wtf.TextField('Summary', [wtf.validators.Required()])
+    hardware = SelectField('Hardware', choices=get_hardware_choices())
+    os_choice = SelectField('Os', choices=get_os_choices())
+    summary = TextField('Summary', [validators.Required()])
     description_default_text = (
         "Description of problem:\n\n\n"
         "Version-Release number of selected component (if applicable):\n\n\n"
@@ -83,35 +87,35 @@ class BugForm(wtf.Form):
         "Expected results:\n\n\n"
         "Additional info:\n\n"
     )
-    description = wtf.TextAreaField('Description',
+    description = TextAreaField('Description',
                                     default=description_default_text)
-    attachment = wtf.FileField('Attachment')
-    external_bug_location = wtf.SelectField(
+    attachment = FileField('Attachment')
+    external_bug_location = SelectField(
         'Location', choices=get_external_bug_location_choices())
-    external_bug_bugid = wtf.TextField('Bug ID')
+    external_bug_bugid = TextField('Bug ID')
 
     # Advanced fields
-    target_release = wtf.SelectField('Target Release', 
+    target_release = SelectField('Target Release',
                                      choices=get_target_release())
-    status = wtf.StringField('Status')
-    assignee = wtf.TextField('Assignee')
-    fedora_review = wtf.SelectField('Fedora-Review', choices=[('?','?')])
-    release_note = wtf.SelectField('Fedora requires release note', choices=[
-                ('?','?'),
-                ('+','+'),
-                ('-','-')
-        ])
-    need_info = wtf.SelectField('Need Info', choices=[
-              ('?','?'),
-              ('+','+'),
-              ('-','-')
-        ])
-    qa_contact = wtf.TextField('QA Contact')
-    docs_contact = wtf.TextField('Docs Contact')
-    cc = wtf.TextField('CC')
-    alias = wtf.TextField('Alias')
-    url = wtf.TextField('URL')
-    whiteboard = wtf.TextField('Whiteboard')
-    clone_of = wtf.TextField('Clone Of')
-    environment = wtf.TextAreaField('Environment')
+    status = StringField('Status')
+    assignee = TextField('Assignee')
+    fedora_review = SelectField('Fedora-Review', choices=[('?','?')])
+    release_note = SelectField('Fedora requires release note', choices=[
+        ('?','?'),
+        ('+','+'),
+        ('-','-')
+    ])
+    need_info = SelectField('Need Info', choices=[
+        ('?','?'),
+        ('+','+'),
+        ('-','-')
+    ])
+    qa_contact = TextField('QA Contact')
+    docs_contact = TextField('Docs Contact')
+    cc = TextField('CC')
+    alias = TextField('Alias')
+    url = TextField('URL')
+    whiteboard = TextField('Whiteboard')
+    clone_of = TextField('Clone Of')
+    environment = TextAreaField('Environment')
 
