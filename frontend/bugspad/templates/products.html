@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block container_content %}
+<h3> Pick a product</h3>
+<div id='products'>
+    <dl class='span9'>
+    {% for item,desc in products.iteritems() %}
+        <dt>
+            <a href='{{item}}'>{{item}}</a>:
+        </dt>
+        <dd>{{desc}}</dd>
+        <br>
+    {% endfor %}
+    </dl>
+</div>
+{% endblock %}
