@@ -53,15 +53,15 @@ def auth_logout():
     return flask.redirect(flask.url_for('index'))
 
 
-@APP.route('/bugs/new/', methods=('GET', 'POST'))
-def bug_create():
-    form = BugForm()
+@APP.route('/bugs/new/products/<product>', methods=('GET', 'POST'))
+def bug_create(product):
+    form = BugForm(product='Fedora', reporter='rtnpro@gmail.com')
     if form.validate_on_submit():
         pass
         # handler = BugspadHandler()
         # bug_id = handler.create_bug(form.data)
         # return flask.redirect('/bug/' + bug_id + '/')
-    return flask.render_template('bug_create.html', form=form)
+    return flask.render_template('bug_create.html', form=form, product=product)
 
 @APP.route('/bugs/new/products/')
 def select_product():

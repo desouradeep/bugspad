@@ -14,16 +14,36 @@
 </div>
 {%- endmacro %}
 
+{%- macro render_field_as_readonly(field) %}
+<div class="control-group {% if field.errors %}error{% endif %}">
+    {{field.label(class="control-label", label=field.description)}}
+    {% if field.flags.required %}<span class="required">*</span>{% endif %}
+  <div class="controls">
+    <p class="{{ kwargs.class }} clearfix">
+      {{ field.data }}
+    </p>
+  </div>
+</div>
+{%- endmacro %}
+
 {%- macro dual_form_row(col_one_fields, col_two_fields) %}
 <div class="row-fluid">
     <div class="span6">
         {%- for field in col_one_fields %}
+          {% if kwargs.col_one_readonly %}
+            {{ render_field_as_readonly(field, class='span12') }}
+          {% else %}
             {{ render_field(field, class='span12') }}
+          {% endif %}
         {%- endfor %}
     </div>
     <div class="span6">
         {%- for field in col_two_fields %}
+          {% if kwargs.col_two_readonly %}
+            {{ render_field_as_readonly(field, class='span12') }}
+          {% else %}
             {{ render_field(field, class='span12') }}
+          {% endif %}
         {%- endfor %}
     </div>
 </div>

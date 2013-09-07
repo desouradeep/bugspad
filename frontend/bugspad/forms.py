@@ -119,3 +119,10 @@ class BugForm(wtf.Form):
     clone_of = TextField('Clone Of')
     environment = TextAreaField('Environment')
 
+    def __init__(self, *args, **kwargs):
+        product = kwargs.pop('product', '')
+        reporter = kwargs.pop('reporter', '')
+        super(BugForm, self).__init__(*args, **kwargs)
+        self.product.data = product
+        self.reporter.data = reporter
+
