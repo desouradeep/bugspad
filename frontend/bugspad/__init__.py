@@ -18,6 +18,16 @@ APP = flask.Flask(__name__)
 # APP.config.from_object('bugspad.default_config')
 APP.session_interface = RedisSessionInterface()
 APP.secret_key = 'A0Zr98j/3yXRT'
+from flask_fas_openid import FAS
+FAS = FAS(APP)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if flask.g.fas_user is None:
+            return flask.redirect(flask.url_for('auth_login', next=flask.request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @APP.route('/')
@@ -29,8 +39,6 @@ def index():
 @APP.route('/login/', methods=('GET', 'POST'))
 def auth_login():
     """ Method to log into the application using FAS OpenID. """
-    from flask_fas_openid import FAS
-    FAS = FAS(APP)
     return_point = flask.url_for('index')
     if 'next' in flask.request.args:
         return_point = flask.request.args['next'] 
@@ -44,8 +52,6 @@ def auth_login():
 @APP.route('/logout/')
 def auth_logout():
     """ Method to log out from the application. """
-    from flask_fas_openid import FAS
-    FAS = FAS(APP)
     if not flask.g.fas_user:
         return flask.redirect(flask.url_for('index'))
     FAS.logout()
@@ -54,8 +60,9 @@ def auth_logout():
 
 
 @APP.route('/bugs/new/products/<product>', methods=('GET', 'POST'))
+@login_required
 def bug_create(product):
-    form = BugForm(product='Fedora', reporter='rtnpro@gmail.com')
+    form = BugForm(product='Fedora', reporter=flask.g.fas_user.email)
     if form.validate_on_submit():
         pass
         # handler = BugspadHandler()
