@@ -5,9 +5,11 @@ import flask
 import vobject
 from functools import wraps
 #from sqlalchemy.exc import SQLAlchemyError
+from flask_fas_openid import FAS
 
 from .bsession import RedisSessionInterface
 from .forms import BugForm
+from .utils import BugspadBackendAPI
 
 # import forms as forms
 
@@ -18,7 +20,6 @@ APP = flask.Flask(__name__)
 # APP.config.from_object('bugspad.default_config')
 APP.session_interface = RedisSessionInterface()
 APP.secret_key = 'A0Zr98j/3yXRT'
-from flask_fas_openid import FAS
 FAS = FAS(APP)
 
 def login_required(f):
@@ -41,8 +42,7 @@ def auth_login():
     """ Method to log into the application using FAS OpenID. """
     return_point = flask.url_for('index')
     if 'next' in flask.request.args:
-        return_point = flask.request.args['next'] 
-    
+        return_point = flask.request.args['next']
     if flask.g.fas_user:
         return flask.redirect(return_point)
 
@@ -64,11 +64,11 @@ def auth_logout():
 def bug_create(product):
     form = BugForm(product='Fedora', reporter=flask.g.fas_user.email)
     if form.validate_on_submit():
-        pass
-        # handler = BugspadHandler()
-        # bug_id = handler.create_bug(form.data)
-        # return flask.redirect('/bug/' + bug_id + '/')
+        backend_obj = BugspadBackendAPI()
+        bug_id = backend_obj.create_bug(form.data)
+        return flask.redirect('/bug/%d/' % bug_id)
     return flask.render_template('bug_create.html', form=form, product=product)
+
 
 @APP.route('/bugs/new/products/')
 def select_product():

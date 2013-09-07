@@ -39,8 +39,8 @@ $(function () {
 <form id="bugform" class="form span8" method="POST">
     {{ form.csrf_token }}
     <fieldset id="basic_one">
-        {{ dual_form_row([form.product], [form.reporter], col_one_readonly=True, col_two_readonly=True) }}
-        {{ full_width_field(form.component) }}
+        {{ dual_form_row([form.product], [form.user], col_one_readonly=True, col_two_readonly=True) }}
+        {{ full_width_field(form.component_id) }}
         {{ dual_form_row([form.version], [form.severity]) }}
         {{ dual_form_row([form.hardware], [form.os_choice]) }}
     </fieldset>

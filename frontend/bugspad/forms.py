@@ -15,7 +15,7 @@ class LoginForm(wtf.Form):
 
 def get_component_choices():
     return [
-        ('a', 'A'),
+        ('1', 'Test'),
         ('b', 'B')
     ]
 
@@ -58,8 +58,8 @@ class BugForm(wtf.Form):
         default='Fedora', description=(
             "Bugs are categorised into Products and Components. Select a "
             "Classification to narrow down this list."))
-    reporter = TextField('Reporter', default='rtnpro@gmail.com')
-    component = SelectField(
+    user = TextField('Reporter', default='rtnpro@gmail.com')
+    component_id = SelectField(
             'Component', [validators.Required()],
             choices=get_component_choices(), description=(
                 "Components are second-level categories; each belongs to a "
@@ -124,5 +124,5 @@ class BugForm(wtf.Form):
         reporter = kwargs.pop('reporter', '')
         super(BugForm, self).__init__(*args, **kwargs)
         self.product.data = product
-        self.reporter.data = reporter
+        self.user.data = reporter
 
