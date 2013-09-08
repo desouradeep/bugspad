@@ -30,11 +30,60 @@ def get_fedora_versions():
 
 
 def get_hardware_choices():
-    return [('x86_64', 'x86_64')]
+    return [
+        ('unspecified','Unspecified'),
+        ('all','All'),
+        ('x86_64','x86_64'),
+        ('aarch64','aarch64'),
+        ('alpha','alpha'),
+        ('alphaev6','alphaev6'),
+        ('am33','am33'),
+        ('arm','arm'),
+        ('athlon','athlon'),
+        ('i386','i386'),
+        ('i586','i586'),
+        ('i686','i686'),
+        ('ia32e','ia32e'),
+        ('ia64','ia64'),
+        ('mips32','mips32'),
+        ('mips64','mips64'),
+        ('noarch','noarch'),
+        ('other','other'),
+        ('parisc11','parisc11'),
+        ('powerpc','powerpc'),
+        ('ppc','ppc'),
+        ('ppc64','ppc64'),
+        ('s390','s390'),
+        ('s390x','s390x'),
+        ('sparc','sparc'),
+        ('sparc64','sparc64'),
+        ('sparcv9','sparcv9'),
+        ('synth','synth'),
+        ('v850','v850')
+    ]
 
 
 def get_os_choices():
-    return [('Linux', 'Linux')]
+    return [
+        ('Unspecified','Unspecified'),
+        ('All','All'),
+        ('Linux','Linux'),
+        ('FreeBSD','FreeBSD'),
+        ('Solaris','Solaris'),
+        ('Mac OS','Mac OS'),
+        ('Windows','Windows'),
+        ('Other','Other'),
+    ]
+
+def get_severity():
+    return [
+        ('unspecified', 'Unspecified'),
+        ('urgent', 'Urgent'),
+        ('high', 'High'),
+        ('medium', 'Medium'),
+        ('low', 'Low')
+    ]
+
 
 
 def get_external_bug_location_choices():
@@ -67,14 +116,7 @@ class BugForm(wtf.Form):
                 "this list."))
     version = SelectField(
         'Version', [validators.Required()], choices=get_fedora_versions())
-    severity = SelectField('Severity', choices=[
-            ('unspecified', 'Unspecified'),
-            ('urgent', 'Urgent'),
-            ('high', 'High'),
-            ('medium', 'Medium'),
-            ('low', 'Low')
-        ]
-    )
+    severity = wtf.SelectField('Severity', choices=get_severity())
     hardware = SelectField('Hardware', choices=get_hardware_choices())
     os_choice = SelectField('Os', choices=get_os_choices())
     summary = TextField('Summary', [validators.Required()])
