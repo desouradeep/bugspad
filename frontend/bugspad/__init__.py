@@ -59,15 +59,15 @@ def auth_logout():
     return flask.redirect(flask.url_for('index'))
 
 
-@APP.route('/bugs/new/products/<product>', methods=('GET', 'POST'))
+@APP.route('/bugs/new/products/<product_id>', methods=('GET', 'POST'))
 @login_required
-def bug_create(product):
-    form = BugForm(product='Fedora', reporter=flask.g.fas_user.email)
+def bug_create(product_id):
+    form = BugForm(product_id=product_id, reporter=flask.g.fas_user.email)
     if form.validate_on_submit():
         backend_obj = BugspadBackendAPI()
         bug_id = backend_obj.create_bug(form.data)
         return flask.redirect('/bug/%d/' % bug_id)
-    return flask.render_template('bug_create.html', form=form, product=product)
+    return flask.render_template('bug_create.html', form=form, product=product_id)
 
 
 @APP.route('/bugs/new/products/')

@@ -5,20 +5,20 @@ from wtforms import (
         TextAreaField, FileField, StringField)
 from datetime import time
 from datetime import datetime
-
+from requests import get
 
 class LoginForm(wtf.Form):
     """ Form to log in the application. """
     username = TextField('Username', [validators.Required()])
     password = PasswordField('Password', [validators.Required()])
 
-
-def get_component_choices():
-    return [
-        ('1', 'Test'),
-        ('b', 'B')
-    ]
-
+def get_component_choices(product_id):
+    components = get('http://127.0.0.1:9998/components/'+str(product_id)).json()
+    component_choices = []
+    for key in components:
+        component = components[key][1:]
+        component_choices.append(tuple(component[::-1]))
+    return component_choices
 
 def get_fedora_versions():
     return [
@@ -27,7 +27,6 @@ def get_fedora_versions():
         ('20', '20'),
         ('rawhide', 'Rawhide')
     ]
-
 
 def get_hardware_choices():
     return [
@@ -62,7 +61,6 @@ def get_hardware_choices():
         ('v850','v850')
     ]
 
-
 def get_os_choices():
     return [
         ('Unspecified','Unspecified'),
@@ -84,7 +82,8 @@ def get_severity():
         ('low', 'Low')
     ]
 
-
+def get_product(product_id):
+    return 'Fedora'
 
 def get_external_bug_location_choices():
     return [
@@ -109,8 +108,7 @@ class BugForm(wtf.Form):
             "Classification to narrow down this list."))
     user = TextField('Reporter', default='rtnpro@gmail.com')
     component_id = SelectField(
-            'Component', [validators.Required()],
-            choices=get_component_choices(), description=(
+            'Component', [validators.Required()], description=(
                 "Components are second-level categories; each belongs to a "
                 "particular Product. Select a Product to narrow down "
                 "this list."))
@@ -162,9 +160,9 @@ class BugForm(wtf.Form):
     environment = TextAreaField('Environment')
 
     def __init__(self, *args, **kwargs):
-        product = kwargs.pop('product', '')
+        product_id = kwargs.pop('product_id', '')
         reporter = kwargs.pop('reporter', '')
         super(BugForm, self).__init__(*args, **kwargs)
-        self.product.data = product
+        self.product.data = get_product(product_id)
         self.user.data = reporter
-
+        self.component_id.choices = get_component_choices(product_id)

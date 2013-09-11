@@ -4,11 +4,11 @@
 <h3> Pick a product</h3>
 <div id='products'>
     <dl class='span9'>
-    {% for item,desc in products.iteritems() %}
+    {% for item,details in products.iteritems() %}
         <dt>
-            <a href='{{item}}'>{{item}}</a>:
+            <a href='{{item}}'>{{details['product']}}</a>:
         </dt>
-        <dd>{{desc}}</dd>
+        <dd>{{details['description']}}</dd>
         <br>
     {% endfor %}
     </dl>
