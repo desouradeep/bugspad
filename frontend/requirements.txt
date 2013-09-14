@@ -1,0 +1,10 @@
+flask
+vobject
+python-openid
+python-openid-cla
+python-openid-teams
+kitchen
+requests
+bunch
+redis
+Flask-WTF
