@@ -73,7 +73,7 @@ def bug_create(product_id):
 def bug_details(bug_id):
     api_obj = BugspadBackendAPI()
     bug_details = api_obj.bug_details(bug_id)
-    form = BugForm(initial_data=bug_details)
+    form = BugForm(initial_data=bug_details, readonly=True)
     return flask.render_template('bug_view.html', form=form)
 
 

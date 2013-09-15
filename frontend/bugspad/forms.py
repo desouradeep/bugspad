@@ -164,6 +164,7 @@ class BugForm(wtf.Form):
         product_id = kwargs.pop('product_id', '')
         reporter = kwargs.pop('reporter', '')
         initial_data = kwargs.pop('initial_data', {})
+        readonly = kwargs.pop('readonly', False)
         super(BugForm, self).__init__(*args, **kwargs)
         self.product.data = get_product(product_id)
         self.user.data = reporter
@@ -174,3 +175,5 @@ class BugForm(wtf.Form):
                 field = getattr(self, key, None)
             if field:
                 field.data = value
+        if not readonly:
+            self.component_id.choices = get_component_choices(product_id)
