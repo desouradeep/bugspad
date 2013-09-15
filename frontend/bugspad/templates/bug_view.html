@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from  "layout_macros.html" import render_field, dual_form_row, full_width_field %}
+
+{% block extracss %}
+<style type="text/css">
+.control-label {
+    font-weight: bold;
+}
+.form-field-ro {
+    background-color: #eee;
+    border-radius: 5px;
+}
+.form-horizontal .control-label {
+    width: 100px;
+}
+.form-horizontal .controls {
+    margin-left: 110px;
+}
+.form-horizontal .control-group {
+    margin-bottom: 10px;
+}
+</style>
+{% endblock %}
+
+{% block container_content %}
+<div class="row-fluid">
+    <div id="bug-details" class="form-horizontal span12">
+        <ul class="breadcrumb">
+            <li>{{ form.summary.data or "No summary yet." }} </li>
+        </ul>
+        {{ dual_form_row([
+                form.status, form.alias, form.product,
+                form.component_id, form.version,
+                form.hardware, form.target_release,
+                form.assignee, form.reported
+            ], [
+                form.qa_contact,
+                form.docs_contact, form.url,
+                form.whiteboard,
+                form.cc, form.clone_of,
+                form.environment, 
+            ], col_one_readonly=True, col_two_readonly=True)}}
+    </div>
+</div>
+<div class="row-fluid">
+    <div id="bug-description" class="clearfix well span12">
+        <legend>Description</legend>
+        <div class="description">
+            {{ form.description.data }}
+        </div>
+        <div class="info pull-right" style="margin-top: 30px;">
+            Reported by {{ form .user.data }} at {{ form.reported.data }}
+        </div>
+    </div>
+</div>
+{% endblock %}

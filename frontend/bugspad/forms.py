@@ -2,7 +2,7 @@ import flask
 from flask.ext import wtf
 from wtforms import (
         TextField, SelectField, validators, PasswordField,
-        TextAreaField, FileField, StringField)
+        TextAreaField, FileField, StringField, DateTimeField)
 from datetime import time
 from datetime import datetime
 from requests import get
@@ -158,6 +158,7 @@ class BugForm(wtf.Form):
     whiteboard = TextField('Whiteboard')
     clone_of = TextField('Clone Of')
     environment = TextAreaField('Environment')
+    reported = DateTimeField('Reported')
 
     def __init__(self, *args, **kwargs):
         product_id = kwargs.pop('product_id', '')
@@ -167,6 +168,9 @@ class BugForm(wtf.Form):
         self.product.data = get_product(product_id)
         self.user.data = reporter
         for key, value in initial_data.items():
-            field = getattr(self, key, None)
+            if key == "reporter_email":
+                field = getattr(self, "user", None)
+            else:
+                field = getattr(self, key, None)
             if field:
                 field.data = value

@@ -74,7 +74,7 @@ def bug_details(bug_id):
     api_obj = BugspadBackendAPI()
     bug_details = api_obj.bug_details(bug_id)
     form = BugForm(initial_data=bug_details)
-    return flask.render_template('bug_edit.html', form=form)
+    return flask.render_template('bug_view.html', form=form)
 
 
 @APP.route('/bugs/new/products/')
