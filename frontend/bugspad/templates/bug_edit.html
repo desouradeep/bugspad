@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "layout_macros.html" import render_field, dual_form_row, full_width_field %}
+
+{% block container_content %}
+<form id="bug-edit-form" class="form form-inline span11" method="POST">
+  {{ form.csrf_token }}
+  {{ full_width_field(form.summary) }}
+  {{ dual_form_row([form.status], [form.user], col_two_readonly=True) }}
+  {{ dual_form_row([form.alias], [form.user], col_two_readonly=True) }}
+</form>
+{% endblock %}

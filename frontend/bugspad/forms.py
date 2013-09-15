@@ -162,7 +162,11 @@ class BugForm(wtf.Form):
     def __init__(self, *args, **kwargs):
         product_id = kwargs.pop('product_id', '')
         reporter = kwargs.pop('reporter', '')
+        initial_data = kwargs.pop('initial_data', {})
         super(BugForm, self).__init__(*args, **kwargs)
         self.product.data = get_product(product_id)
         self.user.data = reporter
-        self.component_id.choices = get_component_choices(product_id)
+        for key, value in initial_data.items():
+            field = getattr(self, key, None)
+            if field:
+                field.data = value

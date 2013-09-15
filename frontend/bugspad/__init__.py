@@ -69,6 +69,13 @@ def bug_create(product_id):
         return flask.redirect('/bug/%d/' % bug_id)
     return flask.render_template('bug_create.html', form=form, product=product_id)
 
+@APP.route('/bug/<int:bug_id>/', methods=('GET',))
+def bug_details(bug_id):
+    api_obj = BugspadBackendAPI()
+    bug_details = api_obj.bug_details(bug_id)
+    form = BugForm(initial_data=bug_details)
+    return flask.render_template('bug_edit.html', form=form)
+
 
 @APP.route('/bugs/new/products/')
 def select_product():

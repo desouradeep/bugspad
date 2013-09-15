@@ -13,3 +13,8 @@ class BugspadBackendAPI(object):
         resp = requests.post(self.base_url + '/bug/', data=json.dumps(data))
         return int(resp.content)
 
+    def bug_details(self, bug_id):
+        resp = requests.get(self.base_url + '/bug/%s' % bug_id)
+        bug_details = json.loads(resp.content)
+        return bug_details
+
