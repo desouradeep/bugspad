@@ -19,6 +19,31 @@
 .form-horizontal .control-group {
     margin-bottom: 10px;
 }
+.bs-docs-example {
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.bs-docs-example.description:after {
+    content: "Description";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #9da0a4;
+    -webkit-border-radius: 4px 0 4px 0;
+    -moz-border-radius: 4px 0 4px 0;
+    border-radius: 4px 0 4px 0;
+}
 </style>
 {% endblock %}
 
@@ -43,13 +68,16 @@
     </div>
 </div>
 <div class="row-fluid">
-    <div id="bug-description" class="clearfix well span12">
-        <legend>Description</legend>
-        <div class="description">
-            {{ form.description.data }}
-        </div>
-        <div class="info pull-right" style="margin-top: 30px;">
-            Reported by {{ form .user.data }} at {{ form.reported.data }}
+    <div id="bug-description" class="bs-docs-example description">
+        <div>
+            <div class="descrtiption" style="padding-bottom: 30px;">
+                {{ form.description.data }}
+            </div>
+            <div class="row">
+                <em class="info pull-right">
+                    Reported by <strong>{{ form .user.data }}</strong> at {{ form.reported.data }}
+                </em>
+            </div>
         </div>
     </div>
 </div>
