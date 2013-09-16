@@ -3,9 +3,8 @@ from flask.ext import wtf
 from wtforms import (
         TextField, SelectField, validators, PasswordField,
         TextAreaField, FileField, StringField, DateTimeField)
-from datetime import time
-from datetime import datetime
-from requests import get
+import datetime
+import requests
 
 class LoginForm(wtf.Form):
     """ Form to log in the application. """
@@ -13,7 +12,7 @@ class LoginForm(wtf.Form):
     password = PasswordField('Password', [validators.Required()])
 
 def get_component_choices(product_id):
-    components = get('http://127.0.0.1:9998/components/'+str(product_id)).json()
+    components = requests.get('http://127.0.0.1:9998/components/'+str(product_id)).json()
     component_choices = []
     for key in components:
         component = components[key][1:]
@@ -174,6 +173,9 @@ class BugForm(wtf.Form):
             else:
                 field = getattr(self, key, None)
             if field:
-                field.data = value
+                if key == 'reported':
+                    field.data = datetime.datetime.strptime(value[:19], '%Y-%m-%d %H:%M:%S')
+                else:
+                    field.data = value
         if not readonly:
             self.component_id.choices = get_component_choices(product_id)

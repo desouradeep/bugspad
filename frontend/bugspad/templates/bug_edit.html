@@ -1,11 +1,94 @@
 {% extends "base.html" %}
-{% from "layout_macros.html" import render_field, dual_form_row, full_width_field %}
+{% from  "layout_macros.html" import render_field, dual_form_row, full_width_field %}
+
+{% block extracss %}
+<style type="text/css">
+.control-label {
+    font-weight: bold;
+}
+.form-field-ro {
+    background-color: #eee;
+    border-radius: 5px;
+}
+.form-horizontal .control-label {
+    width: 100px;
+}
+.form-horizontal .controls {
+    margin-left: 110px;
+}
+.form-horizontal .control-group {
+    margin-bottom: 10px;
+}
+.bs-docs-example {
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.bs-docs-example.description:after {
+    content: "Description";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #9da0a4;
+    -webkit-border-radius: 4px 0 4px 0;
+    -moz-border-radius: 4px 0 4px 0;
+    border-radius: 4px 0 4px 0;
+}
+
+span.required {
+    float: left;
+}
+</style>
+{% endblock %}
 
 {% block container_content %}
-<form id="bug-edit-form" class="form form-inline span11" method="POST">
-  {{ form.csrf_token }}
-  {{ full_width_field(form.summary) }}
-  {{ dual_form_row([form.status], [form.user], col_two_readonly=True) }}
-  {{ dual_form_row([form.alias], [form.user], col_two_readonly=True) }}
-</form>
+<div class="row-fluid">
+    <form id="bug-edit-form" class="form-horizontal span12" method="POST" action="/bug/{{ bug_details.id }}/edit">
+        {{ form.csrf_token }}
+        {{ full_width_field(form.summary) }}
+        {{ dual_form_row([
+                form.status, form.alias, form.product,
+                form.component_id, form.version,
+                form.hardware, form.target_release,
+                form.assignee
+                
+            ], [
+                form.reported, form.qa_contact,
+                form.docs_contact, form.url,
+                form.whiteboard,
+                form.cc, form.clone_of,
+                form.environment, 
+            ])
+        }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large pull-right">Save</button>
+        </div>
+    </form>
+</div>
+<div class="row-fluid">
+    <div class="accordion" id="comments-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment1">
+                    Description by <strong>{{ bug_details.reporter_name }}</strong> <span class="pull-right">{{ form.reported.data }}</span>
+                </a>
+            </div>
+            <div id="comment1" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    {{ form.description.data }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

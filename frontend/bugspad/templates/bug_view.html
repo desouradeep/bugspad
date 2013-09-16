@@ -57,9 +57,10 @@
                 form.status, form.alias, form.product,
                 form.component_id, form.version,
                 form.hardware, form.target_release,
-                form.assignee, form.reported
+                form.assignee
+                
             ], [
-                form.qa_contact,
+                form.reported, form.qa_contact,
                 form.docs_contact, form.url,
                 form.whiteboard,
                 form.cc, form.clone_of,
@@ -68,15 +69,17 @@
     </div>
 </div>
 <div class="row-fluid">
-    <div id="bug-description" class="bs-docs-example description">
-        <div>
-            <div class="descrtiption" style="padding-bottom: 30px;">
-                {{ form.description.data }}
+    <div class="accordion" id="comments-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment1">
+                    Description by <strong>{{ bug_details.reporter_name }}</strong> <span class="pull-right">{{ form.reported.data }}</span>
+                </a>
             </div>
-            <div class="row">
-                <em class="info pull-right">
-                    Reported by <strong>{{ form .user.data }}</strong> at {{ form.reported.data }}
-                </em>
+            <div id="comment1" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    {{ form.description.data }}
+                </div>
             </div>
         </div>
     </div>
