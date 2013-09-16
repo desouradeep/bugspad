@@ -114,7 +114,7 @@ class BugForm(wtf.Form):
                 "this list."))
     version = SelectField(
         'Version', [validators.Required()], choices=get_fedora_versions())
-    severity = wtf.SelectField('Severity', choices=get_severity())
+    severity = SelectField('Severity', choices=get_severity())
     hardware = SelectField('Hardware', choices=get_hardware_choices())
     os_choice = SelectField('Os', choices=get_os_choices())
     summary = TextField('Summary', [validators.Required()])
