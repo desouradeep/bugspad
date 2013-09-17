@@ -18,3 +18,8 @@ class BugspadBackendAPI(object):
         bug_details = json.loads(resp.content)
         return bug_details
 
+    def update_bug(self, bug_id, data):
+        data['user'] = 'rtnpro@gmail.com'
+        data['password'] = 'asdf'
+        resp = requests.post(self.base_url + '/updatebug/', data=json.dumps(data))
+
