@@ -15,6 +15,10 @@
   {% endblock %}
 </head>
 <body>
+  {% block js %}
+    <script src="{{ url_for('static', filename='js/jquery-1.10.2.js')}}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.js')}}"></script>
+  {% endblock %}
   {% block content %}
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -48,10 +52,6 @@
     <div class="main-content {% block main_container_class %}container{% endblock %}">
     {% block container_content %}{% endblock %}
     </div>
-  {% endblock %}
-  {% block js %}
-    <script src="{{ url_for('static', filename='js/jquery-1.10.2.js')}}"></script>
-    <script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.js')}}"></script>
   {% endblock %}
 </body>
 </html>
