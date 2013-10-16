@@ -9,11 +9,15 @@ from flask_fas_openid import FAS
 
 from .bsession import RedisSessionInterface
 from .forms import BugForm
-from .utils import BugspadBackendAPI
+from .utils import BugspadBackendAPI, Paginate
 import requests
 # import forms as forms
 from datetime import datetime
 from time import strftime
+
+from flask import Blueprint
+from flask.ext.paginate import Pagination
+mod = Blueprint('all_bugs', __name__)
 
 # Create the application.
 APP = flask.Flask(__name__)
@@ -70,7 +74,7 @@ def bug_create(product_id):
         return flask.redirect('/bug/%d/' % bug_id)
     return flask.render_template('bug_create.html', form=form, product=product_id)
 
-@APP.route('/bug/<int:bug_id>/', methods=('GET',))
+@APP.route('/bugs/<int:bug_id>/', methods=('GET',))
 def bug_details(bug_id):
     api_obj = BugspadBackendAPI()
     bug_details = api_obj.bug_details(bug_id)
@@ -78,7 +82,7 @@ def bug_details(bug_id):
     return flask.render_template('bug_view.html', form=form, bug_details=bug_details)
 
 
-@APP.route('/bug/<int:bug_id>/edit', methods=('GET', 'POST'))
+@APP.route('/bugs/<int:bug_id>/edit', methods=('GET', 'POST'))
 @login_required
 def bug_edit(bug_id):
     if flask.request.method == 'POST' and flask.request.is_xhr == True:
@@ -121,3 +125,48 @@ def select_product():
     import bugspad.products as products
     data = products.get_products()
     return flask.render_template('products.html', products=data)
+
+@APP.route('/bugs/products/<int:product_id>')
+def bugs_list(product_id):
+    backend_obj = BugspadBackendAPI()
+    all_bugs = backend_obj.get_bugs(product_id)
+
+    if flask.request.method == 'GET' and flask.request.is_xhr == True:
+        page = int(flask.request.values['page'])
+        per_page = int(flask.request.values['per_page'])
+        paging_obj = Paginate(per_page=per_page,
+                              page=page,
+                              total_records=len(all_bugs)
+                        )
+        paging_start, paging_end = paging_obj.get_numbers()
+        show_bugs = all_bugs[(paging_obj.page-1)*paging_obj.per_page:(paging_obj.page)*paging_obj.per_page]
+        row_html = ''
+        for bug in show_bugs:
+            row_html += '<tr class=\'table-row\'>'
+            for data in bug:
+                row_html += '<td>'+data+'</td>'
+            row_html += '</tr>'
+
+        paging_html = '<li class="paging"><a href="/bugs/products/1">First</a></li>'
+        for page in range(paging_start,paging_end+1):
+            paging_html += '''
+            <li id='page-%s' class="paging"><a href='javascript: void(0)'>%s</a></li>
+            ''' % (page, page)
+        paging_html += '<li id="page-%s" class="paging"><a href="javascript: void(0)"> Last</a></li>' % (paging_obj.paging_max_end)
+
+        return flask.make_response(
+            flask.jsonify({'get':True , 'row_html': row_html,
+                'paging_html' : paging_html,
+                'page_total' : paging_obj.paging_max_end,
+                'current_page' : page,
+                }), 200)
+
+    page = int(flask.request.args.get('page', 1))
+    paging_obj = Paginate(per_page=20, page=page, total_records=len(all_bugs))
+    paging_start, paging_end = paging_obj.get_numbers()
+    return flask.render_template('bug_list.html',
+        all_bugs= all_bugs[(paging_obj.page-1)*paging_obj.per_page:(paging_obj.page)*paging_obj.per_page],
+        paging=range(paging_start,paging_end+1),
+        page_total = paging_obj.paging_max_end,
+        current_page = page-1,
+    )
