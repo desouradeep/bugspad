@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block container_content %}
+<script type="text/javascript">
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+function paginate_ajax(page_no, per_page){
+    if(per_page == undefined){
+        per_page = 20
+    }
+    console.log(per_page)
+    $.ajax({
+        type : 'GET',
+        data : {'page':page_no, 'per_page':per_page},
+        success:function(data){
+            $(this).addClass('active')
+            $('.table-row').remove()
+            $('#bug-list').append(data['row_html'])
+            $('.paging').remove()
+            $('#paging-bar').append(data['paging_html'])
+            $('#page-'+page_no).addClass('active')
+            $('#page-'+page_no)[0].children[0].innerText = 'Page '+page_no+' of '+data['page_total']
+            $('#paginate-field').attr('title', 'Should be between 1 and '+data['page_total'])
+            $('#paginate-field').tooltip('hide')
+            $('#paginate-field').tooltip('fixTitle')
+        }
+    });
+}
+$(document).on("click", ".paging", function(){
+    page_no = this.id.substr(5)
+    per_page = $('#per-page').val()
+    paginate_ajax(page_no, per_page)
+});
+$(document).ready(function(){
+    page = getUrlVars()['page']
+    if(page == undefined){
+        page = '1'
+    }
+    $('#page-'+page).addClass('active')
+    $('#page-'+page).children()[0].innerText = 'Page '+page+' of {{page_total}}'
+
+    $('#paginate-button').click(function(){
+        per_page = $('#per-page').val()
+        page_no = $('#paginate-field').val()
+        if(page_no>=1 && page_no<={{page_total}}){
+            paginate_ajax(page_no, per_page)
+        }
+        else{
+            $('#paginate-field').tooltip('show')
+        }
+    })
+
+    $('#per-page').click(function(){
+        per_page = $('#per-page').val()
+        paginate_ajax(page, per_page)
+    })
+});
+</script>
+<div class='row'>
+    <div class='span9'>
+        <h2>Bug Listing</h2>
+    </div>
+    <div class='span3' style='padding-top:1.7%'>
+        <input type='text' placeholder='Search' class='pull-right'>
+    </div>
+</div>
+<hr>
+<table id='bug-list' class='table table-striped table-hover'>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Component</th>
+            <th>Assignee</th>
+            <th>Status</th>
+            <th>Resolution</th>
+            <th>Summary</th>
+            <th>Changed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bug in all_bugs %}
+        <tr class='table-row'>
+            {% for data in bug %}
+            <td>{{data}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class='well row' style='margin-left:0px;padding:0px;'>
+    <div class='span3' style='margin-top:2.2%;'>
+        <b>Results per page : </b>
+        <select id='per-page' style='width:100px;vertical-align: -0.2px;'>
+            <option>20</option>
+            <option>40</option>
+            <option>60</option>
+            <option>80</option>
+            <option>100</option>
+        </select>
+    </div>
+    <div class='span7'>
+        <div class="pagination pagination-large" style='text-align:center;'>
+            <ul id='paging-bar'>
+                <li class='paging'><a href="/bugs/products/1"> First </a></li>
+                {% for i in paging %}
+                <li id='page-{{i}}' class='paging'><a href='javascript: void(0)'>{{i}}</a></li>
+                {% endfor %}
+                <li id='page-{{page_total}}' class='paging'><a href='javascript: void(0)'>Last</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class='span1' style='margin-top:2.2%'>
+        <div class='pull-right'>
+            <div class='input-append'>
+                <input id='paginate-field' type='text' style='width:50px;' title="Should be between 1 and {{page_total}}" placeholder='Page'>
+                <input id='paginate-button' type='button' class='btn btn-success' value='Go'>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+{% endblock %}
