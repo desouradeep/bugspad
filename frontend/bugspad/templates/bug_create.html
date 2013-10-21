@@ -10,11 +10,11 @@ $(function () {
         var $fieldset = $('fieldset#advanced');
         if ($fieldset.css('display') == 'none') {
             $fieldset.slideDown();
-            $('#toggle-advanced-fields-button').html('Hide advanced fields <i class="icon-chevron-down"></i>');
+            $('#toggle-advanced-fields-button').html('<b>Hide advanced fields</b> <i class="icon-chevron-down"></i>');
         } else {
             $fieldset.slideUp(function () {
                 $('#toggle-advanced-fields-button').html(
-                    'Show advanced fields <i class="icon-chevron-right"></i>');
+                    '<b>Show advanced fields</b> <i class="icon-chevron-right"></i>');
             });
         }
     }
@@ -36,38 +36,41 @@ $(function () {
 {% endblock %}
 
 {% block container_content %}
-<form id="bugform" class="form span8" method="POST">
+<form id="bugform" class="form col-xs-10" method="POST">
     {{ form.csrf_token }}
     <fieldset id="basic_one">
         {{ dual_form_row([form.product], [form.user], col_one_readonly=True, col_two_readonly=True) }}
-        {{ full_width_field(form.component_id) }}
+        {{ full_width_field(form.component_id, class='form-control') }}
         {{ dual_form_row([form.version], [form.severity]) }}
         {{ dual_form_row([form.hardware], [form.os_choice]) }}
     </fieldset>
 
-    <a href="#" id='toggle-advanced-fields-button'>Show advanced fields <i class="icon-chevron-right"></i></a>
-    <fieldset id="advanced" style="display: none;">
+    <br>
+    <a href="#" id='toggle-advanced-fields-button' class='btn btn-success col-xs-12'><b>Show advanced fields</b> <i class="icon-chevron-right"></i></a>
+    <fieldset id="advanced" style="display: none;" class='well'>
       {{ dual_form_row([form.target_release]) }}
       {{ dual_form_row([form.status]) }}
       {{ dual_form_row([form.assignee], [form.fedora_review]) }}
       {{ dual_form_row([form.qa_contact], [form.release_note]) }}
       {{ dual_form_row([form.docs_contact], [form.need_info]) }}
       {{ dual_form_row([form.cc])}}
-      {{ full_width_field(form.alias) }}
-      {{ full_width_field(form.url) }}
-      {{ full_width_field(form.whiteboard) }}
-      {{ full_width_field(form.clone_of) }}
-      {{ full_width_field(form.environment) }}
+      {{ full_width_field(form.alias, class='form-control') }}
+      {{ full_width_field(form.url, class='form-control') }}
+      {{ full_width_field(form.whiteboard, class='form-control') }}
+      {{ full_width_field(form.clone_of, class='form-control') }}
+      {{ full_width_field(form.environment, class='form-control') }}
     </fieldset>
     <fieldset id="basic_two">
-        {{ full_width_field(form.summary) }}
-        {{ full_width_field(form.description, rows=15) }}
+        {{ full_width_field(form.summary, class='form-control') }}
+        {{ full_width_field(form.description, rows=15, class='form-control') }}
         {{ full_width_field(form.attachment) }}
-        <p><b>Add external Bug:</b></p>
+        
+        <hr><h4>Add external Bug:</h4><br>
         {{ dual_form_row([form.external_bug_location], [form.external_bug_bugid]) }}
     </fieldset>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <br>
+    <div class=" well well-sm form-actions" style='height:54px;'>
+        <button type="submit" class="btn btn-primary pull-right"><b>Submit</b></button>
     </div>
 </form>
 {% endblock %}
