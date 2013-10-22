@@ -95,20 +95,25 @@ def bug_edit(bug_id):
         requests.post('http://127.0.0.1:9998/comment', json_data)
         post_time = datetime.now().strftime('%Y-%m-%d %X')
         no = flask.request.values['comment_number']
-        comment_html = '''<div class="new-comment accordion" id="comments-accordion">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" href="#comment%s" style="background-color:#f5f5f5">
-                    Description by <strong>%s</strong> <span class="pull-right">%s</span>
-                </a>
-            </div>
-            <div id="comment%s" class="accordion-body collapse in">
+        comment_html = '''
+        <br>
+        <div class="panel-group col-xs-12 new-comment" id="comments-accordion">
+            <div class='panel panel-info'>
+                <div class="panel-heading">
+                    <div class='panel-title'>
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment%s">
+                            Description by <strong>%s</strong> <span class="pull-right">%s</span>
+                        </a>
+                    </div>
+                </div>
+                <div id="comment%s" class="panel-body collapse in">
                 <div class="accordion-inner">
-                    %s
+                            %s
+                    </div>
                 </div>
             </div>
         </div>
-    </div>''' % (no, flask.g.fas_user.fullname, post_time, no, comment_text)
+        ''' % (no, flask.g.fas_user.fullname, post_time, no, comment_text)
         return flask.make_response(flask.jsonify({'post':True ,'comment_html': comment_html }), 200)
 
     api_obj = BugspadBackendAPI()
@@ -144,7 +149,7 @@ def bugs_list(product_id):
         for bug in show_bugs:
             row_html += '<tr class=\'table-row\'>'
             for data in bug:
-                row_html += '<td>'+data+'</td>'
+                row_html += '<td>'+str(data)+'</td>'
             row_html += '</tr>'
 
         paging_html = '<li class="paging"><a href="/bugs/products/1">First</a></li>'

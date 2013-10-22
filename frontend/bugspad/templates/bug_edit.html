@@ -70,10 +70,10 @@ span.required {
     });
 </script>
 
-<div class="row-fluid">
-    <form id="bug-edit-form" class="form-horizontal span12" method="POST" action="/bug/{{ bug_details.id }}/edit">
+<div class="row">
+    <form id="bug-edit-form" class="form-horizontal col-xs-12" method="POST" action="/bug/{{ bug_details.id }}/edit">
         {{ form.csrf_token }}
-        {{ full_width_field(form.summary) }}
+        {{ full_width_field(form.summary, class='form-control') }}
         {{ dual_form_row([
                 form.status, form.alias, form.product,
                 form.component_id, form.version,
@@ -88,20 +88,24 @@ span.required {
                 form.environment, 
             ])
         }}
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-large pull-right">Save</button>
+        <br>
+        <div class="well well-sm form-actions" style='height:54px;'>
+            <button type="submit" class="btn btn-primary pull-right"><b>Submit</b></button>
         </div>
     </form>
 </div>
-<div id='comment-list' class="row-fluid">
-    <div class="accordion" id="comments-accordion">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" href="#comment1" style="background-color:#f5f5f5">
-                    Description by <strong>{{ bug_details.reporter_name }}</strong> <span class="pull-right">{{ form.reported.data }}</span>
-                </a>
+<hr>
+<div class="row" id='comment-list'>
+    <div class="panel-group col-xs-12" id="comments-accordion">
+        <div class='panel panel-info'>
+            <div class="panel-heading">
+                <p class='panel-title'>
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment1">
+                        Description by <strong>{{ bug_details.reporter_name }}</strong> <span class="pull-right">{{ form.reported.data }}</span>
+                    </a>
+                </p>
             </div>
-            <div id="comment1" class="accordion-body collapse in">
+            <div id="comment1" class="panel-body collapse in">
                 <div class="accordion-inner">
                     {{ form.description.data }}
                 </div>
@@ -110,9 +114,18 @@ span.required {
     </div>
 </div>
 <hr>
-<div>
+<div class='well' style='height:197px;'>
     <p><b>Additional Comments : </b></p>
-    <textarea id='comment-box' class='span12' rows='5'></textarea>
-    <button id='comment-submit-button'class='btn btn-success pull-right'><b>Submit</b></button>
+    <textarea id='comment-box' class='col-xs-12 form-control' rows='3'></textarea>
+    <div class='row'>
+        <div class='col-xs-6'>
+            <br>
+            <h5>Post comment as {{ g.fas_user.fullname }} ({{ g.fas_user.username }})</h5>
+        </div>
+        <div class='col-xs-6'>
+            <br>
+            <button id='comment-submit-button'class='btn btn-success pull-right'><b>Post Comment</b></button>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -24,19 +24,22 @@
       <div class="navbar-inner">
         <div class="container">
           {% block navbar_content %}
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <!--<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="{{ url_for('index') }}">Bugspad</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
+          </button>-->
+          <div class="navbar-header">
+            <a id='nav-element-home' class="navbar-brand nav-element"href="{{ url_for('index') }}">Bugspad</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
               <li><a href="{{ url_for('select_product') }}">New</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
-            <form class="navbar-form pull-right" _lpchecked="1">
+            
+            <!--<form class="navbar-form pull-right" _lpchecked="1">
               {% if g.fas_user %}
               <span style="color: #ffffff;">Welcome, {{ g.fas_user.username }}</span>
                 <a href="{{ url_for('auth_logout') }}" class="btn">Sign out</a>
@@ -44,6 +47,17 @@
                 <a href="{{ url_for('auth_login', next=request.url) }}" class="btn">Sign in</a>
               {% endif %}
             </form>
+          -->
+            <ul class='nav navbar-nav navbar-right'>
+              {% if g.fas_user %}
+                <li><a>Welcome, {{ g.fas_user.username }}</a></li>
+                <li><button class='btn btn-primary' style='margin-top:11%' onclick='location.href="{{ url_for("auth_logout") }}"'><b>Sign out</b></a></li>
+              {% else %}
+                <li><button class='btn btn-primary' style='margin-top:11%' onclick='location.href="{{ url_for("auth_login", next=request.url) }}"'><b>Sign in</b></button></li>
+              {% endif %}
+            </form>
+          
+          </ul>
           </div><!--/.nav-collapse -->
           {% endblock %}
         </div>

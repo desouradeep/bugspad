@@ -60,12 +60,13 @@ $(document).ready(function(){
     })
 });
 </script>
+<div class='page'  style='padding-left:1%'>
 <div class='row'>
-    <div class='span9'>
+    <div class='col-xs-9'>
         <h2>Bug Listing</h2>
     </div>
-    <div class='span3' style='padding-top:1.7%'>
-        <input type='text' placeholder='Search' class='pull-right'>
+    <div class='col-xs-3' style='padding-top:1.7%'>
+        <input type='text' placeholder='Search' class='pull-right form-control'>
     </div>
 </div>
 <hr>
@@ -93,9 +94,9 @@ $(document).ready(function(){
 </table>
 
 <div class='well row' style='margin-left:0px;padding:0px;'>
-    <div class='span3' style='margin-top:2.2%;'>
+    <div class='col-xs-3 form-inline' style='margin-top:2.2%;'>
         <b>Results per page : </b>
-        <select id='per-page' style='width:100px;vertical-align: -0.2px;'>
+        <select id='per-page' class='form-control' style='width:100px;vertical-align: -0.2px;'>
             <option>20</option>
             <option>40</option>
             <option>60</option>
@@ -103,9 +104,9 @@ $(document).ready(function(){
             <option>100</option>
         </select>
     </div>
-    <div class='span7'>
-        <div class="pagination pagination-large" style='text-align:center;'>
-            <ul id='paging-bar'>
+    <div class='col-xs-6'>
+        <div class="" style='text-align:center;'>
+            <ul class='pagination pagination-lg' id='paging-bar'>
                 <li class='paging'><a href="/bugs/products/1"> First </a></li>
                 {% for i in paging %}
                 <li id='page-{{i}}' class='paging'><a href='javascript: void(0)'>{{i}}</a></li>
@@ -114,14 +115,15 @@ $(document).ready(function(){
             </ul>
         </div>
     </div>
-    <div class='span1' style='margin-top:2.2%'>
-        <div class='pull-right'>
-            <div class='input-append'>
-                <input id='paginate-field' type='text' style='width:50px;' title="Should be between 1 and {{page_total}}" placeholder='Page'>
-                <input id='paginate-button' type='button' class='btn btn-success' value='Go'>
-            </div>
+    <div class='col-xs-3 pull-right' style='margin-top:2.2%;width:150px;'>
+            <div class='input-group'>
+                <input id='paginate-field' class='form-control' type='text'  title="Should be between 1 and {{page_total}}" placeholder='Page'>
+                <span class="input-group-btn">
+                   <button id='paginate-button' type='button' class='btn btn-success'>Go</button>
+               </span>
+           </div>
         </div>
     </div>
+    <hr>
 </div>
-<hr>
 {% endblock %}
