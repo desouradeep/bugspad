@@ -95,26 +95,13 @@ def bug_edit(bug_id):
         requests.post('http://127.0.0.1:9998/comment', json_data)
         post_time = datetime.now().strftime('%Y-%m-%d %X')
         no = flask.request.values['comment_number']
-        comment_html = '''
-        <br>
-        <div class="panel-group col-xs-12 new-comment" id="comments-accordion">
-            <div class='panel panel-info'>
-                <div class="panel-heading">
-                    <div class='panel-title'>
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment%s">
-                            Description by <strong>%s</strong> <span class="pull-right">%s</span>
-                        </a>
-                    </div>
-                </div>
-                <div id="comment%s" class="panel-body collapse in">
-                <div class="accordion-inner">
-                            %s
-                    </div>
-                </div>
-            </div>
-        </div>
-        ''' % (no, flask.g.fas_user.fullname, post_time, no, comment_text)
-        return flask.make_response(flask.jsonify({'post':True ,'comment_html': comment_html }), 200)
+        comment_data = {
+            'no' : no,
+            'fullname' : flask.g.fas_user.fullname,
+            'post_time' : post_time,
+            'comment_text' : comment_text
+        }
+        return flask.make_response(flask.jsonify({'post':True ,'comment_data': comment_data }), 200)
 
     api_obj = BugspadBackendAPI()
     bug_details = api_obj.bug_details(bug_id)
@@ -145,23 +132,15 @@ def bugs_list(product_id):
                         )
         paging_start, paging_end = paging_obj.get_numbers()
         show_bugs = all_bugs[(paging_obj.page-1)*paging_obj.per_page:(paging_obj.page)*paging_obj.per_page]
-        row_html = ''
-        for bug in show_bugs:
-            row_html += '<tr class=\'table-row\'>'
-            for data in bug:
-                row_html += '<td>'+str(data)+'</td>'
-            row_html += '</tr>'
 
-        paging_html = '<li class="paging"><a href="/bugs/products/1">First</a></li>'
-        for page in range(paging_start,paging_end+1):
-            paging_html += '''
-            <li id='page-%s' class="paging"><a href='javascript: void(0)'>%s</a></li>
-            ''' % (page, page)
-        paging_html += '<li id="page-%s" class="paging"><a href="javascript: void(0)"> Last</a></li>' % (paging_obj.paging_max_end)
-
+        paging_data = {
+            'paging_start' : paging_start,
+            'paging_end' : paging_end
+        }
         return flask.make_response(
-            flask.jsonify({'get':True , 'row_html': row_html,
-                'paging_html' : paging_html,
+            flask.jsonify({'get':True , 
+                'show_bugs' : show_bugs,
+                'paging_data' : paging_data,
                 'page_total' : paging_obj.paging_max_end,
                 'current_page' : page,
                 }), 200)

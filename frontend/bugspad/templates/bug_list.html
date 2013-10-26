@@ -12,16 +12,35 @@ function paginate_ajax(page_no, per_page){
     if(per_page == undefined){
         per_page = 20
     }
-    console.log(per_page)
+
     $.ajax({
         type : 'GET',
         data : {'page':page_no, 'per_page':per_page},
         success:function(data){
             $(this).addClass('active')
+
+            //Build row html
+            row_html = ''
+            no_of_bugs = data['show_bugs'].length
+            for(var bug = 0; bug<no_of_bugs; bug++){
+                row_html += '<tr class=\'table-row\'>'
+                no_of_bugs_current_page = data['show_bugs'][bug].length
+                for(var bug_data = 0; bug_data<no_of_bugs_current_page; bug_data++){
+                    row_html += '<td>'+ data['show_bugs'][bug][bug_data] +'</td>'
+                }
+                row_html += '</tr>'
+            }
+
+            //Build pagination html
+            paging_html = '<li class="paging"><a href="/bugs/products/1">First</a></li>'
+            for (var page = data['paging_data']['paging_start']; page<data['paging_data']['paging_end']+1; page++){
+                paging_html += '<li id="page-' + page + '" class="paging"><a href="javascript: void(0)">' + page + '</a></li>'
+            }
+            paging_html += '<li id="page-'+ data['page_total'] +'" class="paging"><a href="javascript: void(0)"> Last</a></li>'
             $('.table-row').remove()
-            $('#bug-list').append(data['row_html'])
+            $('#bug-list').append(row_html)
             $('.paging').remove()
-            $('#paging-bar').append(data['paging_html'])
+            $('#paging-bar').append(paging_html)
             $('#page-'+page_no).addClass('active')
             $('#page-'+page_no)[0].children[0].innerText = 'Page '+page_no+' of '+data['page_total']
             $('#paginate-field').attr('title', 'Should be between 1 and '+data['page_total'])
@@ -96,7 +115,7 @@ $(document).ready(function(){
 <div class='well row' style='margin-left:0px;padding:0px;'>
     <div class='col-xs-3 form-inline' style='margin-top:2.2%;'>
         <b>Results per page : </b>
-        <select id='per-page' class='form-control' style='width:100px;vertical-align: -0.2px;'>
+        <select id='per-page' class='form-control' style='width:75px;vertical-align: -0.2px;'>
             <option>20</option>
             <option>40</option>
             <option>60</option>
@@ -104,7 +123,7 @@ $(document).ready(function(){
             <option>100</option>
         </select>
     </div>
-    <div class='col-xs-6'>
+    <div class='col-xs-7'>
         <div class="" style='text-align:center;'>
             <ul class='pagination pagination-lg' id='paging-bar'>
                 <li class='paging'><a href="/bugs/products/1"> First </a></li>

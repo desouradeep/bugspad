@@ -61,7 +61,25 @@ span.required {
                 type : 'POST',
                 data : { 'comment': $('#comment-box').val(), 'comment_number': comment_number, csrfmiddlewaretoken:'{{csrf_token}}'},
                 success:function(data){
-                    $(data['comment_html']).hide().appendTo($('#comment-list')).slideDown('fast');
+                    comment_html = '\
+                    <br> \
+                    <div class="panel-group col-xs-12 new-comment" id="comments-accordion"> \
+                        <div class="panel panel-info"> \
+                            <div class="panel-heading"> \
+                                <div class="panel-title"> \
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#comments-accordion" href="#comment'  + data['comment_data']['no']+'"> \
+                                        Description by <strong>' + data['comment_data']['fullname'] + ' </strong> <span class="pull-right">' + data['comment_data']['post_time'] + '</span> \
+                                    </a> \
+                                </div> \
+                            </div> \
+                            <div id="comment' + data['comment_data']['no'] + '" class="panel-body collapse in"> \
+                            <div class="accordion-inner"> \
+                                       ' + data['comment_data']['comment_text'] + ' \
+                                </div> \
+                            </div> \
+                        </div> \
+                    </div>' 
+                    $(comment_html).hide().appendTo($('#comment-list')).slideDown('fast');
                     $('#comment-box').val("")
                     $(window).scrollTop(9999);
                 }
